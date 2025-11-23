@@ -6,14 +6,14 @@ html, body {
 }
 
 .connect-four-container {
-  min-height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;   /* STACK ELEMENTS */
+  align-items: center;      /* CENTER HORIZONTALLY */
+  justify-content: flex-start; /* STOP VERTICAL CENTERING */
   background: linear-gradient(to bottom right, #1e3a8a, #7c3aed, #ec4899);
   font-family: sans-serif;
   position: relative;
-  padding: 2rem;
+  padding: 5rem;
 }
 
 /* Counter Box - Top Left */
@@ -91,6 +91,11 @@ html, body {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  font-size: 1rem;
+  color: #000000;
+  font-weight: bold;
+  color: #1e3a8a;
+  
 }
 
 .score-player {
@@ -98,18 +103,6 @@ html, body {
   height: 40px;
   border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.score-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #64748b;
-}
-
-.score-value {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #1e3a8a;
 }
 
 .score-divider {
@@ -206,8 +199,8 @@ html, body {
 }
 
 .cell {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -215,8 +208,8 @@ html, body {
 }
 
 .piece {
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   transition: opacity 0.2s;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
@@ -270,13 +263,17 @@ html, body {
 }
 
 .button-group {
+  
   display: flex;
   gap: 1rem;
   justify-content: center;
   margin-top: 2rem;
 }
-
+.reset-button-cont{
+  padding: 20px;
+}
 .reset-button {
+  
   padding: 0.75rem 2rem;
   font-size: 1.125rem;
   font-weight: bold;
@@ -328,4 +325,56 @@ html, body {
     flex-direction: column;
     padding-top: 1rem;
   }
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+select {
+  position: fixed;       /* Keep it fixed on the page */
+  top: 20px;             /* Distance from top */
+  left: 50%;             /* Center horizontally */
+  transform: translateX(-50%);
+  z-index: 1000;         /* Make sure it’s on top */
+  margin-bottom: 0;      /* Not needed since it's fixed */
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background-color: #00f6e1;
+  color: #000000;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+select:hover {
+  background-color: #8e0cc1;
+  color: #fff;
+}
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  height: 80%;
+  overflow: auto;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
