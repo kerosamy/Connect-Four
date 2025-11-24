@@ -27,6 +27,7 @@ export default function ConnectFour() {
   const [showTreeModal, setShowTreeModal] = useState(false);
   const [prevBoard, setPrevBoard] = useState(board);
   const [aiAlgorithm, setAiAlgorithm] = useState("minimax");
+  const [aiInfo, setAiInfo] = useState({ time: 0, count: 0 });
   const handleAlgorithmChange = (e) => {
   setAiAlgorithm(e.target.value);
   };
@@ -87,6 +88,7 @@ const dropPiece = async (col) => {
 
           const data = await response.json();
           const aiCol = data.col;
+          setAiInfo({ time: data.time, count: data.count });
           
           if (aiCol != null) {
             for (let aiRow = ROWS - 1; aiRow >= 0; aiRow--) {
@@ -178,7 +180,8 @@ const fetchTree = async () => {
         <option value="expected">Expected Minimax</option>
       </select>
     </label>
-      <DepthCounter counter={counter} setCounter={setCounter} />
+
+      <DepthCounter counter={counter} setCounter={setCounter} aiInfo={aiInfo} />
       <Scoreboard scores={scores} />
       <Board
         board={board}

@@ -28,21 +28,20 @@ def ai_move():
         return jsonify({"error": "Board not provided"}), 400
 
     if algorithm == "minimax":
-        best_col = ai_minimax.best_move(board, depth)
-        _, score = ai_minimax.minimax(board, 0, True, depth)
+        best_col , score , time , count = ai_minimax.best_move(board, depth)
     elif algorithm == "alphabeta":
-        best_col = ai_alphabeta.best_move(board, depth)
-        _, score = ai_alphabeta.minimax(board, 0, True, depth)
+        best_col , score , time , count = ai_alphabeta.best_move(board, depth)
     elif algorithm == "expected":
-        best_col = ai_expected.best_move(board, depth)
-        _, score = ai_expected.expected_minimax(board, 0, True, depth)
+        best_col , score , time , count = ai_expected.best_move(board, depth)
     else:
         return jsonify({"error": "Unknown algorithm"}), 400
     print(best_col)
     print(score)
     return jsonify({
         "col": best_col,
-        "score": score
+        "score": score,
+        "time":time,
+        "count":count
     })
 
 @app.route('/ai-tree', methods=['POST'])

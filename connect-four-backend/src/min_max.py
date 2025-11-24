@@ -1,4 +1,5 @@
 from src.helper import *
+import time
 
 class ConnectFourAIMinMax:
     ROWS:int
@@ -51,39 +52,40 @@ class ConnectFourAIMinMax:
             node["score"] = best_score
             return node
   
-    def minimax(self, board, depth, maximizing, target_depth):
-        valid_moves =  get_valid_moves(board)
+    def minimax(self, board, depth, maximizing, target_depth, count=0):
+        count += 1
+        valid_moves = get_valid_moves(board)
 
         if depth == target_depth or len(valid_moves) == 0:
-            return None, evaluate(board)
+            return None, evaluate(board), count
 
         if maximizing:
             best_score = -1e18
             best_col = None
             for col in valid_moves:
                 row = drop_piece(board, col, self.AI)
-                _, score = self.minimax(board, depth + 1, False, target_depth)
+                _, score, count = self.minimax(board, depth + 1, False, target_depth, count)
                 undo_move(board, col, row)
                 if score > best_score:
                     best_score = score
                     best_col = col
-            return best_col, best_score
+            return best_col, best_score, count
         else:
             best_score = 1e18
             best_col = None
             for col in valid_moves:
                 row = drop_piece(board, col, self.PLAYER)
-                _, score = self.minimax(board, depth + 1, True, target_depth)
+                _, score, count = self.minimax(board, depth + 1, True, target_depth, count)
                 undo_move(board, col, row)
                 if score < best_score:
                     best_score = score
                     best_col = col
-            return best_col, best_score
+            return best_col, best_score, count
+
 
     def best_move(self, board, depth_k):
-        return self.minimax(board, 0, True, depth_k)[0]
-    
-
-
-
-
+        start_time = time.time()
+        best_col, score, count = self.minimax(board, 0, True, depth_k)
+        end_time = time.time()
+        elapsed = end_time - start_time
+        return best_col, score, elapsed, count

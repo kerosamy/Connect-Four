@@ -1,4 +1,5 @@
 from src.helper import *
+import time
 
 class ConnectFourAIExpectedMinMax:
     ROWS: int
@@ -50,7 +51,6 @@ class ConnectFourAIExpectedMinMax:
         return node
 
     def create_chance_node(self, board, col, piece, depth, next_maximizing, target_depth):
-        # Don't modify the board before creating the chance node
         chance_node = {
             "depth": depth + 0.5,
             "type": "chance",
@@ -85,44 +85,47 @@ class ConnectFourAIExpectedMinMax:
         chance_node["score"] = expected_value
         return chance_node
 
-    def expected_minimax(self, board, depth, maximizing, target_depth):
+    def expected_minimax(self, board, depth, maximizing, target_depth, count=0):
+        count += 1
         valid_moves = get_valid_moves(board)
 
         if depth == target_depth or len(valid_moves) == 0:
-            return None, evaluate(board)
+            return None, evaluate(board), count
 
         best_col = None
 
         if maximizing:  
             best_score = -1e18
             for col in valid_moves:
-                expected_score = self.calc_expected_value(board, col, self.AI, depth, False, target_depth)
+                expected_score, count = self.calc_expected_value(board, col, self.AI, depth, False, target_depth, count)
                 if expected_score > best_score:
                     best_score = expected_score
                     best_col = col
-            return best_col, best_score
+            return best_col, best_score, count
         else:  
             best_score = 1e18
             for col in valid_moves:
                 row = drop_piece(board, col, self.PLAYER)
                 if row is not None:
-                    _, score = self.expected_minimax(board, depth + 1, True, target_depth)
+                    _, score, count = self.expected_minimax(board, depth + 1, True, target_depth, count)
                     undo_move(board, col, row)
                     if score < best_score:
                         best_score = score
                         best_col = col
-            return best_col, best_score
+            return best_col, best_score, count
 
-    def calc_expected_value(self, board, col, piece, depth, next_maximizing, target_depth):
+
+    def calc_expected_value(self, board, col, piece, depth, next_maximizing, target_depth, count):
         outcomes = self.prob_vals(board, col)
         expected_value = 0
         for outcome_col, probability in outcomes:
             row = drop_piece(board, outcome_col, piece)
             if row is not None:
-                _, score = self.expected_minimax(board, depth + 1, next_maximizing, target_depth)
+                _, score, count = self.expected_minimax(board, depth + 1, next_maximizing, target_depth, count)
                 undo_move(board, outcome_col, row)
                 expected_value += probability * score
-        return expected_value
+        return expected_value, count
+
 
     def prob_vals(self, board, col):
         outcomes = []
@@ -137,11 +140,15 @@ class ConnectFourAIExpectedMinMax:
         if right_col < self.COLS and right_col in valid_moves:
             outcomes.append((right_col, 0.2))
 
-        # Normalize probabilities
         total_prob = sum(p for _, p in outcomes)
         if total_prob > 0:
             outcomes = [(c, p / total_prob) for c, p in outcomes]
         return outcomes
 
+
     def best_move(self, board, depth_k):
-        return self.expected_minimax(board, 0, True, depth_k)[0]
+        start_time = time.time()
+        best_col, score, count = self.expected_minimax(board, 0, True, depth_k)
+        end_time = time.time()
+        elapsed = end_time - start_time
+        return best_col, score, elapsed, count

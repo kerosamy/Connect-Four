@@ -28,7 +28,7 @@ def value_of(window):
         score += 10
 
     if window.count(PLAYER) == 3 and window.count(0) == 1:
-        score -= 10000000
+        score -= 100000
     elif window.count(PLAYER) == 4 :
         score -= 1000000000
 
@@ -36,7 +36,6 @@ def value_of(window):
 
 def evaluate(board, ROWS=ROWS, COLS=COLS, AI=AI):
     score = 0
-
 
     # Horizontal scoring
     for r in range(ROWS):                                 

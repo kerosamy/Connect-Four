@@ -378,3 +378,39 @@ select:hover {
   border: none;
   cursor: pointer;
 }
+/* AI Stats Box - Top Center */
+.ai-stats {
+  margin-top: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  font-family: sans-serif;
+  font-size: 1rem;
+  color: #1e3a8a;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Each line in AI stats */
+.ai-stats p {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Highlight numbers */
+.ai-stats span {
+  font-weight: bold;
+  color: #7c3aed;
+}
+
+/* Optional small icon or emoji before the label */
+.ai-stats p::before {
+  content: "⏱ "; /* Clock emoji for time */
+  margin-right: 0.25rem;
+}
+
+/* Nodes line example */
+.ai-stats p.nodes::before {
+  content: "📊 "; /* Chart emoji for node count */
+}
